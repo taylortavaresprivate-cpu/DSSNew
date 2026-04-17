@@ -66,6 +66,11 @@ cfg.NLS_CUT_AMOUNT    = 0.2      -- Quanto throttle manter (0.0 = 0%, 0.2 = 20%,
 cfg.NLS_MIN_RPM       = 3000     -- RPM mínimo para ativar
 cfg.NLS_RELEASE_MULT  = 2.0      -- Multiplicador da velocidade de soltar (2.0 = 2x mais rápido)
 
+cfg.SCROLL_GAS_ENABLED       = false
+cfg.SCROLL_GAS_STEP          = 0.10
+cfg.SCROLL_GAS_DECAY         = 0.0
+cfg.SCROLL_GAS_RESET_ON_BRAKE = true
+
 cfg.ABS_ENABLED      = true
 cfg.ABS_LEVEL        = 15
 cfg.ABS_THRESHOLD    = 0.032
@@ -88,6 +93,11 @@ cfg.TC_NDSLIP_DIV = 2.4
 cfg.LAUNCH_ENABLED  = false
 cfg.LAUNCH_RPM      = 4500
 cfg.LAUNCH_CUT_TIME = 200
+
+cfg.CRUISE_ENABLED    = false
+cfg.CRUISE_FULL_SPEED = 30.0
+cfg.CRUISE_GAS_MIN    = 0.30
+cfg.CRUISE_BRAKE_MIN  = 0.25
 
 -- ========================================================================
 -- TABELAS DE NÍVEIS ABS / TC
@@ -220,17 +230,17 @@ function cfg.loadConfig()
 	if cfg.NLS_RELEASE_MULT  < 0.5  then cfg.NLS_RELEASE_MULT  = 0.5  end
 	if cfg.NLS_RELEASE_MULT  > 5.0  then cfg.NLS_RELEASE_MULT  = 5.0  end
 
-	-- [NO-LIFT SHIFT]
-	cfg.NLS_ENABLED      = getb("nls_enabled",      cfg.NLS_ENABLED)
-	cfg.NLS_CUT_DURATION = getf("nls_cut_duration", cfg.NLS_CUT_DURATION)
-	cfg.NLS_CUT_AMOUNT   = getf("nls_cut_amount",   cfg.NLS_CUT_AMOUNT)
-	cfg.NLS_MIN_RPM      = getf("nls_min_rpm",      cfg.NLS_MIN_RPM)
-	if cfg.NLS_CUT_DURATION < 50   then cfg.NLS_CUT_DURATION = 50   end
-	if cfg.NLS_CUT_DURATION > 500  then cfg.NLS_CUT_DURATION = 500  end
-	if cfg.NLS_CUT_AMOUNT   < 0.0  then cfg.NLS_CUT_AMOUNT   = 0.0  end
-	if cfg.NLS_CUT_AMOUNT   > 1.0  then cfg.NLS_CUT_AMOUNT   = 1.0  end
-	if cfg.NLS_MIN_RPM      < 1000 then cfg.NLS_MIN_RPM      = 1000 end
-	if cfg.NLS_MIN_RPM      > 9000 then cfg.NLS_MIN_RPM      = 9000 end
+	-- [AUTO-BLIP] ★ CORREÇÃO: antes era um bloco NLS duplicado ★
+	cfg.BLIP_ENABLED      = getb("blip_enabled",      cfg.BLIP_ENABLED)
+	cfg.BLIP_INTENSITY    = getf("blip_intensity",     cfg.BLIP_INTENSITY)
+	cfg.BLIP_DURATION     = getf("blip_duration",      cfg.BLIP_DURATION)
+	cfg.BLIP_MIN_RPM_DIFF = getf("blip_min_rpm_diff",  cfg.BLIP_MIN_RPM_DIFF)
+	if cfg.BLIP_INTENSITY    < 0.5  then cfg.BLIP_INTENSITY    = 0.5  end
+	if cfg.BLIP_INTENSITY    > 3.0  then cfg.BLIP_INTENSITY    = 3.0  end
+	if cfg.BLIP_DURATION     < 50   then cfg.BLIP_DURATION     = 50   end
+	if cfg.BLIP_DURATION     > 500  then cfg.BLIP_DURATION     = 500  end
+	if cfg.BLIP_MIN_RPM_DIFF < 0    then cfg.BLIP_MIN_RPM_DIFF = 0    end
+	if cfg.BLIP_MIN_RPM_DIFF > 2000 then cfg.BLIP_MIN_RPM_DIFF = 2000 end
 
 	cfg.ABS_ENABLED      = getb("abs_enabled",      cfg.ABS_ENABLED)
 	cfg.ABS_MIN_SPEED    = getf("abs_min_speed",     cfg.ABS_MIN_SPEED)
