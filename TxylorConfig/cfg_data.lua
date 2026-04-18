@@ -15,6 +15,10 @@ M.cfg = {
 	steer_gamma         = 1.0,
 	steer_filter        = 0.0,
 	steer_counter_steer = 2.0,
+	ffb_damper          = 0.5,
+	ffb_lateral         = 0.3,
+	ffb_gamma           = 1.0,
+	steer_max_rate      = 2.5,
 	speed_sensi         = 1.0,
 	speed_sensi_start   = 80.0,
 	speed_sensi_end     = 250.0,
@@ -135,6 +139,7 @@ M.TC_LEVEL_DATA = {
 M.SAVE_KEYS = {
 	'ffb_enabled','ffb_gain','steer_sensi','gyro_gain',
 	'steer_limit','steer_gamma','steer_filter','steer_counter_steer',
+	'ffb_damper','ffb_lateral','ffb_gamma','steer_max_rate',
 	'speed_sensi','speed_sensi_start','speed_sensi_end',
 	'gas_press','gas_release','brake_press','brake_release',
 	'clutch_press','clutch_release',

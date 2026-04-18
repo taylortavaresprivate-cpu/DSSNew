@@ -22,6 +22,15 @@ function M.draw()
 		u.cfgSlider('Counter Steer', 'steer_counter_steer', 0.0, 2.0, '%.2f',
 			'Contra-esterço do volante.\n2.0 = sem limite | 0.0 = desativado')
 		u.hint('Contra-esterço do volante.')
+		u.cfgSlider('FFB Damper', 'ffb_damper', 0.0, 3.0, '%.2f',
+			'Amortece oscilações bruscas do volante.\n0.0 = sem amortecimento | 0.5 = recomendado | 3.0 = máximo')
+		u.hint('Amortece oscilações bruscas do volante.')
+		u.cfgSlider('FFB Lateral', 'ffb_lateral', 0.0, 2.0, '%.2f',
+			'Força G lateral no volante.\n0.0 = desativado | 0.3 = sutil | 2.0 = intenso')
+		u.hint('Força lateral nas curvas.')
+		u.cfgSlider('FFB Gamma', 'ffb_gamma', 0.5, 2.5, '%.2f',
+			'Curva do sinal de FFB.\n1.0 = linear | >1.0 = suave no centro | <1.0 = agressivo')
+		u.hint('Curva de resposta do FFB.')
 	else
 		ui.offsetCursorY(4)
 		u.info('FFB desativado — volante controlado apenas pelo mouse.')
@@ -45,6 +54,10 @@ function M.draw()
 	u.header('SUAVIZAÇÃO')
 	u.cfgSlider('Filter', 'steer_filter', 0.0, 0.95, '%.2f',
 		'0.0 = sem filtro | 0.6 = moderado | 0.8+ = lento')
+	u.header('VELOCIDADE DO VOLANTE')
+	u.cfgSlider('Max Rate', 'steer_max_rate', 0.5, 10.0, '%.1f',
+		'Velocidade máxima de inversão do volante.\nBaixo = restringe movimentos bruscos | Alto = mais livre')
+	u.hint('Velocidade máxima de giro ao inverter o esterço.')
 
 	u.header('SENSIBILIDADE POR VELOCIDADE')
 	u.cfgSlider('Speed Sensi', 'speed_sensi', 0.0, 1.0, '%.2f',

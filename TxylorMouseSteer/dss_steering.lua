@@ -34,13 +34,29 @@ function steering.update(dt, data, ui)
 		end
 	end
 
+	local prevVelocity = steering.steerVelocity
+
 	if cfg.FFB_ENABLED then
 		local velocityAngle = math.atan2(car.localVelocity.x, car.localVelocity.z)
 			/ (math.pi / 2) * isDrive * isForward
 		local effVelocityAngle = math.clamp(velocityAngle, -cfg.STEER_COUNTER_STEER, cfg.STEER_COUNTER_STEER)
+
+		-- FFB com gamma
+		local rawFfb = data.ffb * cfg.FFB_GAIN
+		local ffbSign = rawFfb >= 0 and 1 or -1
+		local ffbForce = ffbSign * math.pow(math.abs(rawFfb) + 1e-9, cfg.FFB_GAMMA)
+
+		-- Força lateral (G lateral normalizado por 9.81 m/s²)
+		local lateralForce = (car.localAcceleration.x / 9.81) * cfg.FFB_LATERAL * isDrive * isForward
+
+		-- Damper (usa velocidade do frame anterior)
+		local damperForce = prevVelocity * cfg.FFB_DAMPER
+
 		steering.steerVelocity = (mouseSteer - effVelocityAngle - steering.steerAngle) * effSensi
-			- data.ffb * cfg.FFB_GAIN
+			- ffbForce
 			+ data.localAngularVelocity.y * cfg.GYRO_GAIN * isForward
+			- lateralForce
+			- damperForce
 	else
 		steering.steerVelocity = (mouseSteer - steering.steerAngle) * effSensi
 	end
@@ -51,7 +67,7 @@ function steering.update(dt, data, ui)
 	local steerDelta = targetSteer - steering.steerAngle
 	if steering.steerAngle * targetSteer < 0 then
 		steerDelta = math.clamp(steerDelta,
-			-cfg.STEER_REVERSAL_LIMIT * dt, cfg.STEER_REVERSAL_LIMIT * dt)
+			-cfg.STEER_MAX_RATE * dt, cfg.STEER_MAX_RATE * dt)
 	end
 
 	local rawSteer = math.clamp(steering.steerAngle + steerDelta, -1, 1)
